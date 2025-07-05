@@ -33,6 +33,7 @@ def test_model_download_and_embedding():
     config = LanguageModelConfig(
         type=ModelType.HuggingFaceLocalEmbedding,
         model="nomic-ai/nomic-embed-text-v1.5",
+        api_key="",
         auth_type="api_key",
         encoding_model="cl100k_base"
     )

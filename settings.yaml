@@ -28,7 +28,7 @@ models:
     api_base: http://172.16.167.2:11434/api/embeddings
     # api_version: 2024-05-01-preview
     auth_type: api_key # or azure_managed_identity
-
+    api_key: ${HUGGINGFACE_API_KEY}
     # audience: "https://cognitiveservices.azure.com/.default"
     # organization: <organization_id>
     model: nomic-ai/nomic-embed-text-v1.5
