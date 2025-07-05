@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Microsoft Corporation.
 # Licensed under the MIT License
 
-"""A package containing a factory for supported llm types."""
+"""A package containing a factory for supported index types."""
 
 from collections.abc import Callable
 from typing import Any, ClassVar
@@ -12,7 +12,7 @@ from graphrag.language_model.providers.fnllm.models import (
     AzureOpenAIChatFNLLM,
     AzureOpenAIEmbeddingFNLLM,
     OpenAIChatFNLLM,
-    OpenAIEmbeddingFNLLM,
+    OpenAIEmbeddingFNLLM, LocalHuggingFaceEmbeddingModel,
 )
 
 
@@ -111,4 +111,8 @@ ModelFactory.register_embedding(
 )
 ModelFactory.register_embedding(
     ModelType.OpenAIEmbedding, lambda **kwargs: OpenAIEmbeddingFNLLM(**kwargs)
+)
+# 注册新的HuggingFace本地模型
+ModelFactory.register_embedding(
+    ModelType.HuggingFaceLocalEmbedding, lambda **kwargs: LocalHuggingFaceEmbeddingModel(**kwargs)
 )

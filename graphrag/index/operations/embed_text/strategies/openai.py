@@ -34,8 +34,8 @@ async def run(
 
     batch_size = args.get("batch_size", 16)
     batch_max_tokens = args.get("batch_max_tokens", 8191)
-    llm_config = args["llm"]
-    llm_config = LanguageModelConfig(**args["llm"])
+    llm_config = args["index"]
+    llm_config = LanguageModelConfig(**args["index"])
     splitter = _get_splitter(llm_config, batch_max_tokens)
     model = ModelManager().get_or_create_embedding_model(
         name="text_embedding",

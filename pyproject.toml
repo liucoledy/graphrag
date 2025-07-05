@@ -70,6 +70,13 @@ pandas = "^2.2.3"
 pyarrow = ">=17.0.0"
 umap-learn = "^0.5.6"
 
+# Jupyter Support (新增)
+jupyter = "^1.1.1"
+ipykernel = "^6.29.5"
+nbconvert = "^7.16.4"
+notebook = "^7.1.0"  # 新增：完整的notebook支持
+jupyterlab = "^4.2.0"  # 新增：JupyterLab支持
+
 # Configuration
 pyyaml = "^6.0.2"
 python-dotenv = "^1.0.1"
@@ -90,6 +97,13 @@ tqdm = "^4.67.1"
 
 textblob = "^0.18.0.post0"
 spacy = "^3.8.4"
+# HuggingFace Local Models
+sentence-transformers = "^3.0.0"
+transformers = "^4.40.0"
+torch = "^2.2.0"
+einops = "^0.8.0"
+accelerate = "^0.30.0"
+safetensors = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.6.9"

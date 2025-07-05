@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Microsoft Corporation.
 # Licensed under the MIT License
 
-"""FNLLM llm events provider."""
+"""FNLLM index events provider."""
 
 from typing import Any
 

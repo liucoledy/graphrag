@@ -60,7 +60,7 @@ async def test_create_community_reports():
     llm_settings["parse_json"] = True
     config.community_reports.strategy = {
         "type": "graph_intelligence",
-        "llm": llm_settings,
+        "index": llm_settings,
         "graph_prompt": "",
     }
 

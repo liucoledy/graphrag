@@ -28,12 +28,12 @@ class DRIFTSearchConfig(BaseModel):
         default=graphrag_config_defaults.drift_search.embedding_model_id,
     )
     data_max_tokens: int = Field(
-        description="The data llm maximum tokens.",
+        description="The data index maximum tokens.",
         default=graphrag_config_defaults.drift_search.data_max_tokens,
     )
 
     reduce_max_tokens: int | None = Field(
-        description="The reduce llm maximum tokens response to produce.",
+        description="The reduce index maximum tokens response to produce.",
         default=graphrag_config_defaults.drift_search.reduce_max_tokens,
     )
 
@@ -43,7 +43,7 @@ class DRIFTSearchConfig(BaseModel):
     )
 
     reduce_max_completion_tokens: int | None = Field(
-        description="The reduce llm maximum tokens response to produce.",
+        description="The reduce index maximum tokens response to produce.",
         default=graphrag_config_defaults.drift_search.reduce_max_completion_tokens,
     )
 

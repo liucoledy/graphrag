@@ -25,7 +25,7 @@ async def run_graph_intelligence(
     args: StrategyConfig,
 ) -> SummarizedDescriptionResult:
     """Run the graph intelligence entity extraction strategy."""
-    llm_config = LanguageModelConfig(**args["llm"])
+    llm_config = LanguageModelConfig(**args["index"])
     llm = ModelManager().get_or_create_chat_model(
         name="summarize_descriptions",
         model_type=llm_config.type,

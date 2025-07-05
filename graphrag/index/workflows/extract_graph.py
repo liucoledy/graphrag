@@ -87,6 +87,7 @@ async def extract_graph(
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """All the steps to create the base entity graph."""
     # this returns a graph for each text unit, to be merged later
+    # 提取实体和关系
     extracted_entities, extracted_relationships = await extractor(
         text_units=text_units,
         callbacks=callbacks,
@@ -114,7 +115,7 @@ async def extract_graph(
     # copy these as is before any summarization
     raw_entities = extracted_entities.copy()
     raw_relationships = extracted_relationships.copy()
-
+    # 根据提取出来的实体和关系进行摘要描述
     entities, relationships = await get_summarized_entities_relationships(
         extracted_entities=extracted_entities,
         extracted_relationships=extracted_relationships,

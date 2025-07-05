@@ -19,7 +19,7 @@ def validate_config_names(logger: ProgressLogger, parameters: GraphRagConfig) ->
     default_llm_settings = parameters.get_language_model_config("default_chat_model")
 
     llm = ModelManager().register_chat(
-        name="test-llm",
+        name="test-index",
         model_type=default_llm_settings.type,
         config=default_llm_settings,
         callbacks=NoopWorkflowCallbacks(),
@@ -39,7 +39,7 @@ def validate_config_names(logger: ProgressLogger, parameters: GraphRagConfig) ->
     )
 
     embed_llm = ModelManager().register_embedding(
-        name="test-embed-llm",
+        name="test-embed-index",
         model_type=embedding_llm_settings.type,
         config=embedding_llm_settings,
         callbacks=NoopWorkflowCallbacks(),

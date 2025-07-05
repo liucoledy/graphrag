@@ -32,15 +32,15 @@ class GlobalSearchConfig(BaseModel):
         default=graphrag_config_defaults.global_search.max_context_tokens,
     )
     data_max_tokens: int = Field(
-        description="The data llm maximum tokens.",
+        description="The data index maximum tokens.",
         default=graphrag_config_defaults.global_search.data_max_tokens,
     )
     map_max_length: int = Field(
-        description="The map llm maximum response length in words.",
+        description="The map index maximum response length in words.",
         default=graphrag_config_defaults.global_search.map_max_length,
     )
     reduce_max_length: int = Field(
-        description="The reduce llm maximum response length in words.",
+        description="The reduce index maximum response length in words.",
         default=graphrag_config_defaults.global_search.reduce_max_length,
     )
 

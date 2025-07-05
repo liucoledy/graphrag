@@ -45,7 +45,7 @@ class ExtractGraphConfig(BaseModel):
 
         return self.strategy or {
             "type": ExtractEntityStrategyType.graph_intelligence,
-            "llm": model_config.model_dump(),
+            "index": model_config.model_dump(),
             "extraction_prompt": (Path(root_dir) / self.prompt).read_text(
                 encoding="utf-8"
             )

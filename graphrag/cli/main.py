@@ -7,7 +7,6 @@ import os
 import re
 from collections.abc import Callable
 from pathlib import Path
-
 import typer
 
 from graphrag.config.defaults import graphrag_config_defaults

@@ -12,7 +12,7 @@ async def generate_domain(model: ChatModel, docs: str | list[str]) -> str:
 
     Parameters
     ----------
-    - llm (CompletionLLM): The LLM to use for generation
+    - index (CompletionLLM): The LLM to use for generation
     - docs (str | list[str]): The domain to generate a persona for
 
     Returns

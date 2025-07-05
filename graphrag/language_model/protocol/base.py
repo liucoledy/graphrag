@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Microsoft Corporation.
 # Licensed under the MIT License
 
-"""Base llm protocol definitions."""
+"""Base index protocol definitions."""
 
 from __future__ import annotations
 

@@ -140,7 +140,7 @@ def get_global_search_engine(
 
     dynamic_community_selection_kwargs = {}
     if dynamic_community_selection:
-        # TODO: Allow for another llm definition only for Global Search to leverage -mini models
+        # TODO: Allow for another index definition only for Global Search to leverage -mini models
 
         dynamic_community_selection_kwargs.update({
             "model": model,

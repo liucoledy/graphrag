@@ -37,7 +37,7 @@ async def test_generate_text_embeddings():
 
     config.embed_text.strategy = {
         "type": TextEmbedStrategyType.openai,
-        "llm": llm_settings,
+        "index": llm_settings,
     }
     config.embed_text.names = list(all_embeddings)
     config.snapshots.embeddings = True

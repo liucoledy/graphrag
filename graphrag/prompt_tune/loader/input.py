@@ -90,7 +90,7 @@ async def load_docs_in_chunks(
             callbacks=NoopWorkflowCallbacks(),
             cache=NoopPipelineCache(),
             args={
-                "llm": embeddings_llm_settings.model_dump(),
+                "index": embeddings_llm_settings.model_dump(),
                 "num_threads": embeddings_llm_settings.concurrent_requests,
                 "batch_size": config.embed_text.batch_size,
                 "batch_max_tokens": config.embed_text.batch_max_tokens,

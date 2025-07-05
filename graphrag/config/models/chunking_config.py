@@ -24,6 +24,10 @@ class ChunkingConfig(BaseModel):
         description="The chunk by columns to use.",
         default=graphrag_config_defaults.chunks.group_by_columns,
     )
+    """"
+     token：默认的分块策略 为token 基于令牌进行分块，每个块的大小为`size`参数指定的值，重叠量为`overlap`参数指定的值
+     sentence：基于`NLTK`的句子分割器进行分块，适合需要进行句子级别分析的应用，如情感分析、文本摘要等。
+    """
     strategy: ChunkStrategyType = Field(
         description="The chunking strategy to use.",
         default=graphrag_config_defaults.chunks.strategy,

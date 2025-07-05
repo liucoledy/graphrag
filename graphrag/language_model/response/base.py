@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Microsoft Corporation.
 # Licensed under the MIT License
 
-"""Base llm response protocol."""
+"""Base index response protocol."""
 
 from typing import Any, Generic, Protocol, TypeVar
 

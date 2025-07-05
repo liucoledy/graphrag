@@ -49,7 +49,7 @@ class CommunityReportsConfig(BaseModel):
 
         return self.strategy or {
             "type": CreateCommunityReportsStrategyType.graph_intelligence,
-            "llm": model_config.model_dump(),
+            "index": model_config.model_dump(),
             "graph_prompt": (Path(root_dir) / self.graph_prompt).read_text(
                 encoding="utf-8"
             )

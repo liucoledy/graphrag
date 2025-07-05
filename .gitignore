@@ -11,7 +11,7 @@ tests/fixtures/cache
 tests/fixtures/*/cache
 tests/fixtures/*/output
 output/lancedb
-
+models/
 
 # Random
 .DS_Store

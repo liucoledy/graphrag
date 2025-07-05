@@ -183,7 +183,7 @@ class LanguageModelConfig(BaseModel):
         default=language_model_defaults.proxy,
     )
     audience: str | None = Field(
-        description="Azure resource URI to use with managed identity for the llm connection.",
+        description="Azure resource URI to use with managed identity for the index connection.",
         default=language_model_defaults.audience,
     )
     model_supports_json: bool | None = Field(

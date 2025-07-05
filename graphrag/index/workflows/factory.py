@@ -46,15 +46,18 @@ class PipelineFactory:
 
 # --- Register default implementations ---
 _standard_workflows = [
+    #执行完 这个工作流会在output生成两个文档 document.parquet 和 text_units_parquet
     "create_base_text_units",
+    # 这个工作流会将这两个文档的字段内容进行合并，即把`text_units.parquet`文件中的字段合并到`documents.parquet`文件中
+    # 会在原来的文档的基础上增加一个 text_unit_ids字段
     "create_final_documents",
-    "extract_graph",
-    "finalize_graph",
-    "extract_covariates",
-    "create_communities",
-    "create_final_text_units",
-    "create_community_reports",
-    "generate_text_embeddings",
+    # "extract_graph",
+    # "finalize_graph",
+    # "extract_covariates",
+    # "create_communities",
+    # "create_final_text_units",
+    # "create_community_reports",
+    # "generate_text_embeddings",
 ]
 _fast_workflows = [
     "create_base_text_units",

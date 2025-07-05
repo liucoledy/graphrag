@@ -45,7 +45,7 @@ class SummarizeDescriptionsConfig(BaseModel):
 
         return self.strategy or {
             "type": SummarizeStrategyType.graph_intelligence,
-            "llm": model_config.model_dump(),
+            "index": model_config.model_dump(),
             "summarize_prompt": (Path(root_dir) / self.prompt).read_text(
                 encoding="utf-8"
             )

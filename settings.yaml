@@ -1,0 +1,173 @@
+### This config file contains required core defaults that must be set, along with a handful of common optional settings.
+### For a full list of available settings, see https://microsoft.github.io/graphrag/config/yaml/
+
+### LLM settings ###
+## There are a number of settings to tune the threading and token limits for LLM calls - check the docs.
+
+models:
+  default_chat_model:
+    type: openai_chat # or azure_openai_chat
+    api_base: https://api.deepseek.com
+    # api_version: 2024-05-01-preview
+    auth_type: api_key # or azure_managed_identity
+    api_key: ${GRAPHRAG_API_KEY} # set this in the generated .env file
+    # audience: "https://cognitiveservices.azure.com/.default"
+    # organization: <organization_id>
+    model: deepseek-chat
+    # deployment_name: <azure_model_deployment_name>
+    encoding_model: cl100k_base # automatically set by tiktoken if left undefined
+    model_supports_json: true # recommended if this is available for your model.
+    concurrent_requests: 25 # max number of simultaneous LLM requests allowed
+    async_mode: threaded # or asyncio
+    retry_strategy: native
+    max_retries: 10
+    tokens_per_minute: auto              # set to null to disable rate limiting
+    requests_per_minute: auto            # set to null to disable rate limiting
+  default_embedding_model:
+    type: huggingface_local_embedding # or azure_openai_embedding
+    api_base: http://172.16.167.2:11434/api/embeddings
+    # api_version: 2024-05-01-preview
+    auth_type: api_key # or azure_managed_identity
+
+    # audience: "https://cognitiveservices.azure.com/.default"
+    # organization: <organization_id>
+    model: nomic-ai/nomic-embed-text-v1.5
+    # deployment_name: <azure_model_deployment_name>
+    encoding_model: cl100k_base # automatically set by tiktoken if left undefined
+    model_supports_json: true # recommended if this is available for your model.
+    concurrent_requests: 25 # max number of simultaneous LLM requests allowed
+    async_mode: threaded # or asyncio
+    retry_strategy: native
+    max_retries: 10
+    tokens_per_minute: auto              # set to null to disable rate limiting
+    requests_per_minute: auto            # set to null to disable rate limiting
+
+### Input settings ###
+
+input:
+  storage:
+    type: file # or blob
+    base_dir: "input"
+  file_pattern: '^(?P<source>[^/]+)_(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})\.txt'
+  file_filter:
+    year: '2025'
+    month: '07'
+#    day: '05'
+  file_type: text # [csv, text, json]
+  # metadata字段比较重要 拆分之后的chunk也会保存 metadata信息，对后续的检索也会有影响（后面再聊）
+  metadata:
+    - "month"
+    - "year"
+    - "day"
+  
+
+chunks:
+  size: 1200
+  overlap: 100
+  # 默认是以id来分组  如果改为 month 字段 如果month下面有多个文件 就可能会把多个文件合并成一个chunk（文件大小不足1200）
+  group_by_columns: [month]
+  #  token：默认的分块策略 为token 基于令牌进行分块，每个块的大小为`size`参数指定的值，重叠量为`overlap`参数指定的值
+  #  sentence：基于`NLTK`的句子分割器进行分块，适合需要进行句子级别分析的应用，如情感分析、文本摘要等。
+  strategy: tokens
+
+### Output/storage settings ###
+## If blob storage is specified in the following four sections,
+## connection_string and container_name must be provided
+
+output:
+  type: file # [file, blob, cosmosdb]
+  base_dir: "output"
+    
+cache:
+  type: file # [file, blob, cosmosdb]
+  base_dir: "cache"
+
+reporting:
+  type: file # [file, blob, cosmosdb]
+  base_dir: "logs"
+
+vector_store:
+  default_vector_store:
+    type: lancedb
+    db_uri: output\lancedb
+    container_name: default
+    overwrite: True
+
+### Workflow settings ###
+
+embed_text:
+  model_id: default_embedding_model
+  vector_store_id: default_vector_store
+# 提取实体和关系
+extract_graph:
+  model_id: default_chat_model
+  prompt: "prompts/extract_graph.txt"
+  # 定义提取的实体类型
+  entity_types: [organization,person,geo,event]
+  max_gleanings: 1
+  # 默认是依赖大模型通过提示词来提取 也可以配置 使用NLTK来提取
+  ## NLTK是一个用于 自然语言处理（NLP） 的 Python 库。广泛用于文本分析、语言建模、标注、分词、句法分析等任务，特别适合教学和原型开发。
+  strategy: graph_intelligence
+# 这个配置是根据提取出来的实体和关系 生成对应的摘要 默认是依赖大模型通过提示词来提取 也可以配置 使用NLTK来提取
+summarize_descriptions:
+  model_id: default_chat_model
+  prompt: "prompts/summarize_descriptions.txt"
+  max_length: 500
+  strategy: graph_intelligence
+
+extract_graph_nlp:
+  text_analyzer:
+    extractor_type: regex_english # [regex_english, syntactic_parser, cfg]
+
+cluster_graph:
+  max_cluster_size: 10
+
+extract_claims:
+  enabled: false
+  model_id: default_chat_model
+  prompt: "prompts/extract_claims.txt"
+  description: "Any claims or facts that could be relevant to information discovery."
+  max_gleanings: 1
+
+community_reports:
+  model_id: default_chat_model
+  graph_prompt: "prompts/community_report_graph.txt"
+  text_prompt: "prompts/community_report_text.txt"
+  max_length: 2000
+  max_input_length: 8000
+
+embed_graph:
+  enabled: false # if true, will generate node2vec embeddings for nodes
+
+umap:
+  enabled: false # if true, will generate UMAP embeddings for nodes (embed_graph must also be enabled)
+
+snapshots:
+  graphml: false
+  embeddings: false
+
+### Query settings ###
+## The prompt locations are required here, but each search method has a number of optional knobs that can be tuned.
+## See the config docs: https://microsoft.github.io/graphrag/config/yaml/#query
+
+local_search:
+  chat_model_id: default_chat_model
+  embedding_model_id: default_embedding_model
+  prompt: "prompts/local_search_system_prompt.txt"
+
+global_search:
+  chat_model_id: default_chat_model
+  map_prompt: "prompts/global_search_map_system_prompt.txt"
+  reduce_prompt: "prompts/global_search_reduce_system_prompt.txt"
+  knowledge_prompt: "prompts/global_search_knowledge_system_prompt.txt"
+
+drift_search:
+  chat_model_id: default_chat_model
+  embedding_model_id: default_embedding_model
+  prompt: "prompts/drift_search_system_prompt.txt"
+  reduce_prompt: "prompts/drift_search_reduce_prompt.txt"
+
+basic_search:
+  chat_model_id: default_chat_model
+  embedding_model_id: default_embedding_model
+  prompt: "prompts/basic_search_system_prompt.txt"

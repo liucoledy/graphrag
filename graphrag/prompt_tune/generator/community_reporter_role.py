@@ -16,7 +16,7 @@ async def generate_community_reporter_role(
 
     Parameters
     ----------
-    - llm (CompletionLLM): The LLM to use for generation
+    - index (CompletionLLM): The LLM to use for generation
     - domain (str): The domain to generate a persona for
     - persona (str): The persona to generate a role for
     - docs (str | list[str]): The domain to generate a persona for

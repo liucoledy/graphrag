@@ -15,7 +15,7 @@ async def generate_persona(
 
     Parameters
     ----------
-    - llm (CompletionLLM): The LLM to use for generation
+    - index (CompletionLLM): The LLM to use for generation
     - domain (str): The domain to generate a persona for
     - task (str): The task to generate a persona for. Default is DEFAULT_TASK
     """

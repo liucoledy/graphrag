@@ -16,7 +16,7 @@ async def generate_community_report_rating(
 
     Parameters
     ----------
-    - llm (CompletionLLM): The LLM to use for generation
+    - index (CompletionLLM): The LLM to use for generation
     - domain (str): The domain to generate a rating for
     - persona (str): The persona to generate a rating for for
     - docs (str | list[str]): Documents used to contextualize the rating

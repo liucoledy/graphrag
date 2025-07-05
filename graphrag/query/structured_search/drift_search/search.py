@@ -46,7 +46,7 @@ class DRIFTSearch(BaseSearch[DRIFTSearchContextBuilder]):
         Initialize the DRIFTSearch class.
 
         Args:
-            llm (ChatOpenAI): The language model used for searching.
+            index (ChatOpenAI): The language model used for searching.
             context_builder (DRIFTSearchContextBuilder): Builder for search context.
             config (DRIFTSearchConfig, optional): Configuration settings for DRIFTSearch.
             token_encoder (tiktoken.Encoding, optional): Token encoder for managing tokens.

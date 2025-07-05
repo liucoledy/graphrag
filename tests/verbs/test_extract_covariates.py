@@ -40,7 +40,7 @@ async def test_extract_covariates():
     config.extract_claims.enabled = True
     config.extract_claims.strategy = {
         "type": "graph_intelligence",
-        "llm": llm_settings,
+        "index": llm_settings,
         "claim_description": "description",
     }
 

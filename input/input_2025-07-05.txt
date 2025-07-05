@@ -1,0 +1,161 @@
+In today's data-driven market, algorithms and applications are collecting data 24/7 about people, processes, systems, and organizations, resulting in huge volumes of data. The challenge, though, is how to process this massive amount of data with speed and efficiency, and without sacrificing meaningful insights.
+
+This is where the MapReduce programming model comes to rescue. Initially used by Google for analyzing its search results, MapReduce gained massive popularity due to its ability to split and process terabytes of data in parallel, achieving quicker results.
+
+What is MapReduce?
+MapReduce is a programming model or pattern within the Hadoop framework that is used to access big data stored in the Hadoop File System (HDFS). It is a core component, integral to the functioning of the Hadoop framework.
+
+MapReduce facilitates concurrent processing by splitting petabytes of data into smaller chunks, and processing them in parallel on Hadoop commodity servers. In the end, it aggregates all the data from multiple servers to return a consolidated output back to the application.
+
+Learn more with, “What is Hadoop?” →
+For example, a Hadoop cluster with 20,000 inexpensive commodity servers and 256MB block of data in each, can process around 5TB of data at the same time. This reduces the processing time as compared to sequential processing of such a large data set.
+
+With MapReduce, rather than sending data to where the application or logic resides, the logic is executed on the server where the data already resides, to expedite processing. Data access and storage is disk-based—the input is usually stored as files containing structured, semi-structured, or unstructured data, and the output is also stored in files.
+
+MapReduce was once the only method through which the data stored in the HDFS could be retrieved, but that is no longer the case. Today, there are other query-based systems such as Hive and Pig that are used to retrieve data from the HDFS using SQL-like statements. However, these usually run along with jobs that are written using the MapReduce model. That's because MapReduce has unique advantages.
+
+How MapReduce Works
+At the crux of MapReduce are two functions: Map and Reduce. They are sequenced one after the other.
+
+The Map function takes input from the disk as <key,value> pairs, processes them, and produces another set of intermediate <key,value> pairs as output.
+The Reduce function also takes inputs as <key,value> pairs, and produces <key,value> pairs as output.
+
+
+The types of keys and values differ based on the use case. All inputs and outputs are stored in the HDFS. While the map is a mandatory step to filter and sort the initial data, the reduce function is optional.
+
+<k1, v1> -> Map() -> list(<k2, v2>)
+<k2, list(v2)> -> Reduce() -> list(<k3, v3>)
+
+Mappers and Reducers are the Hadoop servers that run the Map and Reduce functions respectively. It doesn’t matter if these are the same or different servers.
+
+Map
+The input data is first split into smaller blocks. Each block is then assigned to a mapper for processing.
+
+For example, if a file has 100 records to be processed, 100 mappers can run together to process one record each. Or maybe 50 mappers can run together to process two records each. The Hadoop framework decides how many mappers to use, based on the size of the data to be processed and the memory block available on each mapper server.
+
+Reduce
+After all the mappers complete processing, the framework shuffles and sorts the results before passing them on to the reducers. A reducer cannot start while a mapper is still in progress. All the map output values that have the same key are assigned to a single reducer, which then aggregates the values for that key.
+
+Combine and Partition
+There are two intermediate steps between Map and Reduce.
+
+Combine is an optional process. The combiner is a reducer that runs individually on each mapper server. It reduces the data on each mapper further to a simplified form before passing it downstream.
+
+This makes shuffling and sorting easier as there is less data to work with. Often, the combiner class is set to the reducer class itself, due to the cumulative and associative functions in the reduce function. However, if needed, the combiner can be a separate class as well.
+
+Partition is the process that translates the <key, value> pairs resulting from mappers to another set of <key, value> pairs to feed into the reducer. It decides how the data has to be presented to the reducer and also assigns it to a particular reducer.
+
+The default partitioner determines the hash value for the key, resulting from the mapper, and assigns a partition based on this hash value. There are as many partitions as there are reducers. So, once the partitioning is complete, the data from each partition is sent to a specific reducer.
+
+
+
+See why Qlik and Talend are a Leader in the Gartner® Magic Quadrant™ for Data Integration Tools
+
+Get the report
+
+
+A MapReduce Example
+Consider an ecommerce system that receives a million requests every day to process payments. There may be several exceptions thrown during these requests such as "payment declined by a payment gateway," "out of inventory," and "invalid address." A developer wants to analyze last four days' logs to understand which exception is thrown how many times.
+
+Example Use Case
+The objective is to isolate use cases that are most prone to errors, and to take appropriate action. For example, if the same payment gateway is frequently throwing an exception, is it because of an unreliable service or a badly written interface? If the "out of inventory" exception is thrown often, does it mean the inventory calculation service has to be improved, or does the inventory stocks need to be increased for certain products?
+
+The developer can ask relevant questions and determine the right course of action. To perform this analysis on logs that are bulky, with millions of records, MapReduce is an apt programming model. Multiple mappers can process these logs simultaneously: one mapper could process a day's log or a subset of it based on the log size and the memory block available for processing in the mapper server.
+
+Map
+For simplification, let's assume that the Hadoop framework runs just four mappers. Mapper 1, Mapper 2, Mapper 3, and Mapper 4.
+
+The value input to the mapper is one record of the log file. The key could be a text string such as "file name + line number." The mapper, then, processes each record of the log file to produce key value pairs. Here, we will just use a filler for the value as '1.' The output from the mappers look like this:
+
+Mapper 1 -> <Exception A, 1>, <Exception B, 1>, <Exception A, 1>, <Exception C, 1>, <Exception A, 1>
+Mapper 2 -> <Exception B, 1>, <Exception B, 1>, <Exception A, 1>, <Exception A, 1>
+Mapper 3 -> <Exception A, 1>, <Exception C, 1>, <Exception A, 1>, <Exception B, 1>, <Exception A, 1>
+Mapper 4 -> <Exception B, 1>, <Exception C, 1>, <Exception C, 1>, <Exception A, 1>
+
+Assuming that there is a combiner running on each mapper—Combiner 1 … Combiner 4—that calculates the count of each exception (which is the same function as the reducer), the input to Combiner 1 will be:
+
+<Exception A, 1>, <Exception B, 1>, <Exception A, 1>, <Exception C, 1>, <Exception A, 1>
+
+Combine
+The output of Combiner 1 will be:
+
+<Exception A, 3>, <Exception B, 1>, <Exception C, 1>
+
+The output from the other combiners will be:
+
+Combiner 2: <Exception A, 2> <Exception B, 2>
+Combiner 3: <Exception A, 3> <Exception B, 1> <Exception C, 1>
+Combiner 4: <Exception A, 1> <Exception B, 1> <Exception C, 2>
+
+Partition
+After this, the partitioner allocates the data from the combiners to the reducers. The data is also sorted for the reducer.
+
+The input to the reducers will be as below:
+
+Reducer 1: <Exception A> {3,2,3,1}
+Reducer 2: <Exception B> {1,2,1,1}
+Reducer 3: <Exception C> {1,1,2}
+
+If there were no combiners involved, the input to the reducers will be as below:
+
+Reducer 1: <Exception A> {1,1,1,1,1,1,1,1,1}
+Reducer 2: <Exception B> {1,1,1,1,1}
+Reducer 3: <Exception C> {1,1,1,1}
+
+Here, the example is a simple one, but when there are terabytes of data involved, the combiner process’ improvement to the bandwidth is significant.
+
+Reduce
+Now, each reducer just calculates the total count of the exceptions as:
+
+Reducer 1: <Exception A, 9>
+Reducer 2: <Exception B, 5>
+Reducer 3: <Exception C, 4>
+
+The data shows that Exception A is thrown more often than others and requires more attention. When there are more than a few weeks' or months' of data to be processed together, the potential of the MapReduce program can be truly exploited.
+
+How to Implement MapReduce
+MapReduce programs are not just restricted to Java. They can also be written in C, C++, Python, Ruby, Perl, etc. Here is what the main function of a typical MapReduce job looks like:
+
+public static void main(String[] args) throws Exception {
+JobConf conf = new JobConf(ExceptionCount.class);
+conf.setJobName("exceptioncount");
+
+conf.setOutputKeyClass(Text.class);
+conf.setOutputValueClass(IntWritable.class);
+
+conf.setMapperClass(Map.class);
+conf.setReducerClass(Reduce.class);
+conf.setCombinerClass(Reduce.class);
+
+conf.setInputFormat(TextInputFormat.class);
+conf.setOutputFormat(TextOutputFormat.class);
+
+FileInputFormat.setInputPaths(conf, new Path(args[0]));
+FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+
+JobClient.runJob(conf);
+
+}
+
+The parameters—MapReduce class name, Map, Reduce and Combiner classes, input and output types, input and output file paths—are all defined in the main function. The Mapper class extends MapReduceBase and implements the Mapper interface. The Reducer class extends MapReduceBase and implements the Reducer interface.
+
+To get on with a detailed code example, check out these Hadoop tutorials.
+
+MapReduce Tutorials in Talend
+While MapReduce is an agile and resilient approach to solving big data problems, its inherent complexity means that it takes time for developers to gain expertise. Organizations need skilled manpower and a robust infrastructure in order to work with big data sets using MapReduce.
+
+This is where Talend's data integration solution comes in. It provides a ready framework to bring together the various tools used in the Hadoop ecosystem, such as Hive, Pig, Flume, Kafka, HBase, etc. The Talend Studio provides a UI-based environment that enables users to load and extract data from the HDFS.
+
+Watch an introduction to Talend Studio video. →
+Specifically, for MapReduce, Talend Studio makes it easier to create jobs that can run on the Hadoop cluster, set parameters such as mapper and reducer class, input and output formats, and more.
+
+Once you create a Talend MapReduce job (different from the definition of a Apache Hadoop job), it can be deployed as a service, executable, or stand-alone job that runs natively on the big data cluster. It spawns one or more Hadoop MapReduce jobs that, in turn, execute the MapReduce algorithm.
+
+Before running a MapReduce job, the Hadoop connection needs to be configured. For more details on how to use Talend for setting up MapReduce jobs, refer to these tutorials.
+
+Leveraging MapReduce To Solve Big Data Problems
+The MapReduce programming paradigm can be used with any complex problem that can be solved through parallelization.
+
+A social media site could use it to determine how many new sign-ups it received over the past month from different countries, to gauge its increasing popularity among different geographies. A trading firm could perform its batch reconciliations faster and also determine which scenarios often cause trades to break. Search engines could determine page views, and marketers could perform sentiment analysis using MapReduce.
+
+To learn more about MapReduce and experiment with use cases like the ones listed above, download Talend Studio today.
